@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoFlow Pro Max - Public Video Platform</title>
+    <meta name="theme-color" content="#667eea">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #ffffff;
+            --blur-amount: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Glass Morphism */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.4);
+            transform: translateY(-5px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .max-badge {
+            display: inline-block;
+            background: var(--success-gradient);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Admin Access Button */
+        .admin-access {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .admin-btn {
+            background: var(--secondary-gradient);
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+
+        /* Login Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--success-gradient);
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn-danger {
+            background: var(--secondary-gradient);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            margin-bottom: 40px;
+            padding: 40px;
+            display: none;
+        }
+
+        .admin-panel.show {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .admin-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 50px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .upload-button {
+            background: var(--success-gradient);
+            color: var(--text-light);
+            padding: 20px 40px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        /* Folder Selection */
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .folder-option {
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .folder-option:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .folder-option.selected {
+            border-color: #00f2fe;
+            background: rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .folder-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Gallery Header */
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .folder-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: transparent;
+            color: var(--text-light);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            border-color: #00f2fe;
+            background: rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        /* Video Gallery */
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* Video Cards */
+        .video-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .video-info {
+            padding: 25px;
+        }
+
+        .video-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        .video-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .folder-tag {
+            background: var(--secondary-gradient);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-download {
+            background: var(--success-gradient);
+            color: var(--text-light);
+        }
+
+        .btn-delete {
+            background: var(--secondary-gradient);
+            color: var(--text-light);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Messages */
+        .message {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .message.success {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: rgba(76, 175, 80, 0.5);
+            color: #4caf50;
+        }
+
+        .message.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: rgba(244, 67, 54, 0.5);
+            color: #f44336;
+        }
+
+        .message.info {
+            background: rgba(33, 150, 243, 0.2);
+            border-color: rgba(33, 150, 243, 0.5);
+            color: #2196f3;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            opacity: 0.8;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .max-badge {
+                display: block;
+                margin: 15px auto 0;
+                width: fit-content;
+            }
+            
+            .video-gallery {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .folder-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .video-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                min-width: auto;
+            }
+
+            .admin-access {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .upload-area {
+                padding: 30px 20px;
+            }
+            
+            .folder-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎬 VideoFlow <span class="max-badge">Pro Max</span></h1>
+            <p class="subtitle">Public Video Platform - Anyone Can Watch & Download</p>
+        </header>
+
+        <!-- Admin Access Button -->
+        <div class="admin-access">
+            <button class="admin-btn" onclick="openAdminModal()">🔐 Admin Access</button>
+        </div>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeAdminModal()">&times;</button>
+                <h2 style="text-align: center; margin-bottom: 30px; background: var(--success-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🔐 Admin Login</h2>
+                <div class="form-group">
+                    <label class="form-label" for="username">Username:</label>
+                    <input type="text" id="username" class="form-input" placeholder="priyanshu1836" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password:</label>
+                    <input type="password" id="password" class="form-input" placeholder="1836@1836" required>
+                </div>
+                <button class="btn btn-full" onclick="login()">
+                    <span id="loginText">Login</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <section id="adminPanel" class="admin-panel glass-card">
+            <div class="admin-header">
+                <h2 class="admin-title">⚡ Admin Control Panel</h2>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Upload Section -->
+            <div class="upload-area" onclick="document.getElementById('videoFile').click()">
+                <div class="upload-icon">📁</div>
+                <button class="upload-button">Select Video File</button>
+                <p style="opacity: 0.8; margin-bottom: 10px;">या यहाँ drag & drop करें</p>
+                <p style="opacity: 0.6; font-size: 14px;">Maximum file size: 2GB per file • Total: 20GB</p>
+                <input type="file" id="videoFile" class="file-input" accept="video/*" onchange="handleFileSelect(event)">
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText" style="text-align: center; margin-top: 10px; font-size: 14px;">0%</p>
+                </div>
+            </div>
+
+            <!-- Folder Selection -->
+            <h3 style="margin-bottom: 15px; color: var(--text-light);">📂 Select Folder Category:</h3>
+            <div class="folder-grid" id="folderGrid">
+                <div class="folder-option" data-folder="Entertainment">
+                    <div class="folder-icon">🎭</div>
+                    <div>Entertainment</div>
+                </div>
+                <div class="folder-option" data-folder="Education">
+                    <div class="folder-icon">📚</div>
+                    <div>Education</div>
+                </div>
+                <div class="folder-option" data-folder="Music">
+                    <div class="folder-icon">🎵</div>
+                    <div>Music</div>
+                </div>
+                <div class="folder-option" data-folder="Sports">
+                    <div class="folder-icon">⚽</div>
+                    <div>Sports</div>
+                </div>
+                <div class="folder-option" data-folder="Technology">
+                    <div class="folder-icon">💻</div>
+                    <div>Technology</div>
+                </div>
+                <div class="folder-option" data-folder="Movies">
+                    <div class="folder-icon">🎬</div>
+                    <div>Movies</div>
+                </div>
+            </div>
+            <div style="margin-top: 15px;">
+                <input type="text" id="customFolder" class="form-input" placeholder="या कोई custom folder name लिखें">
+            </div>
+
+            <!-- Video Details -->
+            <div class="form-group">
+                <label class="form-label" for="videoTitle">Video Title:</label>
+                <input type="text" id="videoTitle" class="form-input" placeholder="Enter video title" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="videoDescription">Video Description:</label>
+                <textarea id="videoDescription" class="form-input" rows="4" placeholder="Enter video description"></textarea>
+            </div>
+
+            <button class="btn btn-full" onclick="uploadVideo()" id="uploadBtn">
+                📤 Upload Video
+            </button>
+        </section>
+
+        <!-- Messages -->
+        <div id="messageArea"></div>
+
+        <!-- Public Video Gallery -->
+        <section class="gallery-section">
+            <div class="gallery-header">
+                <h2 class="gallery-title">🎬 Public Video Gallery</h2>
+                <div class="folder-filter" id="folderFilter"></div>
+            </div>
+            <div id="videoGallery" class="video-gallery"></div>
+        </section>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        let selectedFile = null;
+        let selectedFolder = 'General';
+        let currentFilter = 'All';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVideos();
+            setupDragAndDrop();
+            setupFolderSelection();
+            updateFolderFilter();
+        });
+
+        // Admin Modal Functions
+        function openAdminModal() {
+            document.getElementById('loginModal').classList.add('show');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('loginModal').classList.remove('show');
+        }
+
+        // Setup drag and drop
+        function setupDragAndDrop() {
+            const uploadArea = document.querySelector('.upload-area');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+            });
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('video/')) {
+                    selectedFile = files[0];
+                    showMessage(`✅ File selected: ${files[0].name}`, 'success');
+                }
+            }
+        }
+
+        // Setup folder selection
+        function setupFolderSelection() {
+            const folderOptions = document.querySelectorAll('.folder-option');
+            
+            folderOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    folderOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedFolder = this.dataset.folder;
+                    document.getElementById('customFolder').value = '';
+                });
+            });
+
+            document.getElementById('customFolder').addEventListener('input', function() {
+                if (this.value.trim()) {
+                    selectedFolder = this.value.trim();
+                    folderOptions.forEach(opt => opt.classList.remove('selected'));
+                } else if (!document.querySelector('.folder-option.selected')) {
+                    selectedFolder = 'General';
+                }
+            });
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.querySelector('#loginModal .btn');
+            const loginText = document.getElementById('loginText');
+            
+            loginBtn.disabled = true;
+            loginText.innerHTML = '<span class="loading"></span>Logging in...';
+            
+            setTimeout(() => {
+                if (username === 'priyanshu1836' && password === '1836@1836') {
+                    isAdmin = true;
+                    closeAdminModal();
+                    document.getElementById('adminPanel').classList.add('show');
+                    showMessage('🎉 Admin login successful!', 'success');
+                    loadVideos(); // Reload to show admin buttons
+                } else {
+                    showMessage('❌ Invalid credentials!', 'error');
+                }
+                
+                loginBtn.disabled = false;
+                loginText.textContent = 'Login';
+            }, 1500);
+        }
+
+        // Logout function
+        function logout() {
+            isAdmin = false;
+            document.getElementById('adminPanel').classList.remove('show');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            resetForm();
+            showMessage('👋 Logged out successfully!', 'success');
+            loadVideos(); // Reload to hide admin buttons
+        }
+
+        // Handle file selection
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('video/')) {
+                if (file.size > 2 * 1024 * 1024 * 1024) { // 2GB limit
+                    showMessage('⚠️ File size too large! Maximum 2GB allowed.', 'error');
+                    return;
+                }
+                selectedFile = file;
+                showMessage(`✅ File selected: ${file.name}`, 'success');
+            } else {
+                showMessage('❌ Please select a valid video file!', 'error');
+            }
+        }
+
+        // Upload video
+        function uploadVideo() {
+            if (!selectedFile) {
+                showMessage('⚠️ Please select a video file first!', 'error');
+                return;
+            }
+
+            const title = document.getElementById('videoTitle').value.trim();
+            if (!title) {
+                showMessage('⚠️ Please enter a video title!', 'error');
+                return;
+            }
+
+            const customFolderInput = document.getElementById('customFolder').value.trim();
+            if (customFolderInput) {
+                selectedFolder = customFolderInput;
+            }
+
+            const description = document.getElementById('videoDescription').value.trim();
+            
+            // Show progress
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            progressContainer.style.display = 'block';
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<span class="loading"></span>Uploading...';
+
+            // Simulate upload progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 95) {
+                    progress = 95;
+                    clearInterval(interval);
+                }
+                progressFill.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '%';
+            }, 200);
+
+            // Process file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                clearInterval(interval);
+                progressFill.style.width = '100%';
+                progressText.textContent = '100%';
+                
+                setTimeout(() => {
+                    const videoData = {
+                        id: Date.now(),
+                        title: title,
+                        description: description,
+                        folder: selectedFolder,
+                        data: e.target.result,
+                        filename: selectedFile.name,
+                        size: selectedFile.size,
+                        uploadDate: new Date().toLocaleDateString('hi-IN'),
+                        uploadTime: new Date().toLocaleTimeString('hi-IN')
+                    };
+
+                    // Save to localStorage
+                    const videos = JSON.parse(localStorage.getItem('videoflow_videos') || '[]');
+                    videos.push(videoData);
+                    localStorage.setItem('videoflow_videos', JSON.stringify(videos));
+
+                    resetForm();
+                    showMessage('🎉 Video uploaded successfully!', 'success');
+                    loadVideos();
+                    updateFolderFilter();
+                }, 1000);
+            };
+
+            reader.readAsDataURL(selectedFile);
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('videoDescription').value = '';
+            document.getElementById('videoFile').value = '';
+            document.getElementById('customFolder').value = '';
+            document.querySelectorAll('.folder-option').forEach(opt => opt.classList.remove('selected'));
+            selectedFile = null;
+            selectedFolder = 'General';
+            
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            progressContainer.style.display = 'none';
+            progressFill.style.width = '0%';
+            progressText.textContent = '0%';
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = '📤 Upload Video';
+        }
+
+        // Update folder filter
+        function updateFolderFilter() {
+            const videos = JSON.parse(localStorage.getItem('videoflow_videos') || '[]');
+            const folders = [...new Set(videos.map(video => video.folder))];
+            const filterContainer = document.getElementById('folderFilter');
+            
+            let filterHTML = '<button class="filter-btn active" onclick="filterVideos(\'All\')">All</button>';
+            folders.forEach(folder => {
+                filterHTML += `<button class="filter-btn" onclick="filterVideos('${folder}')">${folder}</button>`;
+            });
+            
+            filterContainer.innerHTML = filterHTML;
+        }
+
+        // Filter videos by folder
+        function filterVideos(folder) {
+            currentFilter = folder;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadVideos();
+        }
+
+        // Load and display videos (PUBLIC FUNCTION - Always visible)
+        function loadVideos() {
+            const videos = JSON.parse(localStorage.getItem('videoflow_videos') || '[]');
+            const gallery = document.getElementById('videoGallery');
+            
+            let filteredVideos = videos;
+            if (currentFilter !== 'All') {
+                filteredVideos = videos.filter(video => video.folder === currentFilter);
+            }
+            
+            if (filteredVideos.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎬</div>
+                        <h3 style="margin-bottom: 10px;">कोई videos नहीं मिलीं</h3>
+                        <p>Admin द्वारा videos upload होने के बाद यहाँ दिखेंगी।</p>
+                        <p style="margin-top: 10px; opacity: 0.8;">Public access - कोई login की जरूरत नहीं!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            gallery.innerHTML = filteredVideos.reverse().map(video => `
+                <div class="video-card">
+                    <video class="video-player" controls preload="metadata" playsinline>
+                        <source src="${video.data}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <p class="video-description">${video.description || 'No description available'}</p>
+                        <div class="video-meta">
+                            <span>📅 ${video.uploadDate} ${video.uploadTime || ''}</span>
+                            <span class="folder-tag">${video.folder}</span>
+                        </div>
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 15px;">
+                            📁 ${formatFileSize(video.size)}
+                        </div>
+                        <div class="video-actions">
+                            <button class="action-btn btn-download" onclick="downloadVideo('${video.id}')">
+                                💾 Download
+                            </button>
+                            ${isAdmin ? `<button class="action-btn btn-delete" onclick="deleteVideo('${video.id}')">🗑️ Delete</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Download video (PUBLIC FUNCTION)
+        function downloadVideo(videoId) {
+            const videos = JSON.parse(localStorage.getItem('videoflow_videos') || '[]');
+            const video = videos.find(v => v.id == videoId);
+            
+            if (video) {
+                const link = document.createElement('a');
+                link.href = video.data;
+                link.download = video.filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showMessage('⬇️ Download started!', 'success');
+            }
+        }
+
+        // Delete video (ADMIN ONLY)
+        function deleteVideo(videoId) {
+            if (!isAdmin) return;
+            
+            if (confirm('Are you sure you want to delete this video?')) {
+                let videos = JSON.parse(localStorage.getItem('videoflow_videos') || '[]');
+                videos = videos.filter(v => v.id != videoId);
+                localStorage.setItem('videoflow_videos', JSON.stringify(videos));
+                showMessage('🗑️ Video deleted successfully!', 'success');
+                loadVideos();
+                updateFolderFilter();
+            }
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerHTML = `<div class="message ${type}">${message}</div>`;
+            
+            setTimeout(() => {
+                const messageEl = messageArea.querySelector('.message');
+                if (messageEl) {
+                    messageEl.style.opacity = '0';
+                    messageEl.style.transform = 'translateY(-20px)';
+                    setTimeout(() => messageArea.innerHTML = '', 300);
+                }
+            }, 4000);
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAdminModal();
+            }
+        });
+    </script>
+</body>
+</html>
