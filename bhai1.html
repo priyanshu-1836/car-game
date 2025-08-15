@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🎉 Happy Birthday Srijan — 28 Aug 🎂</title>
+<meta name="theme-color" content="#111827">
+<style>
+  :root{
+    --bg1:#0f172a; /* slate-900 */
+    --glass:rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.18);
+    --txt:#e5e7eb; /* gray-200 */
+    --accent:#8b5cf6; /* violet-500 */
+    --accent2:#22d3ee; /* cyan-400 */
+    --good:#34d399; /* emerald-400 */
+    --warn:#fb7185; /* rose-400 */
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    color:var(--txt);
+    background: radial-gradient(1200px 600px at 10% 10%, #1f2937 0%, transparent 60%) ,
+                radial-gradient(1000px 800px at 90% 20%, #0ea5e9 0%, transparent 55%),
+                radial-gradient(900px 700px at 50% 100%, #7c3aed 0%, transparent 60%),
+                var(--bg1);
+    overflow:hidden;
+  }
+
+  /* layered canvases */
+  canvas#fireworks, canvas#confetti, canvas#stars {
+    position:fixed; inset:0; width:100vw; height:100vh; display:block;
+  }
+  #stars{z-index:0; opacity:.65}
+  #fireworks{z-index:1}
+  #confetti{z-index:2; pointer-events:none}
+
+  /* Glass card */
+  .shell{
+    position:fixed; inset:0;
+    display:grid; place-items:center; padding:16px;
+    z-index:3;
+  }
+  .card{
+    width:min(880px, 92vw);
+    backdrop-filter: blur(16px) saturate(1.2);
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+    border:1px solid var(--border);
+    border-radius:24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.06);
+    padding:22px 20px 18px;
+  }
+
+  .title{
+    font-size: clamp(28px, 5vw, 54px);
+    line-height:1.05;
+    font-weight:800;
+    letter-spacing:.5px;
+    text-shadow: 0 1px 12px rgba(255,255,255,.12);
+    display:flex; align-items:center; justify-content:center; gap:.5ch; flex-wrap:wrap;
+  }
+  .title .grad{
+    background: linear-gradient(90deg, #a78bfa, #22d3ee, #34d399, #f472b6);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 0 24px rgba(99,102,241,.35));
+    animation: hue 8s linear infinite;
+  }
+  @keyframes hue { from{filter:hue-rotate(0)} to{filter:hue-rotate(360deg)} }
+
+  .subtitle{
+    margin-top:8px; font-size: clamp(14px, 2.5vw, 18px);
+    opacity:.9; text-align:center;
+  }
+
+  /* countdown */
+  .countdown{
+    margin:18px auto 8px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+  }
+  .pill{
+    border:1px solid var(--border);
+    background:var(--glass);
+    border-radius:14px; padding:10px 14px; min-width:84px;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .pill .num{ font-size: clamp(20px, 6vw, 32px); font-weight:800 }
+  .pill .lab{ font-size:12px; letter-spacing:.6px; opacity:.85 }
+
+  /* buttons */
+  .actions{ margin:18px auto 6px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center }
+  .btn{
+    --shadow: 0 8px 20px rgba(139,92,246,.35);
+    position:relative; isolation:isolate;
+    padding:12px 16px; border-radius:999px; font-weight:700; letter-spacing:.3px;
+    border:2px solid currentColor; background:transparent; color:var(--txt);
+    cursor:pointer; transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+    outline: none;
+  }
+  .btn:active{ transform: translateY(2px) scale(.98) }
+  .btn .ico{margin-right:8px}
+  .btn-primary{ color:var(--accent); box-shadow: var(--shadow)}
+  .btn-primary:hover{ background:rgba(139,92,246,.14) }
+  .btn-good{ color:var(--good); box-shadow: 0 8px 20px rgba(52,211,153,.30)}
+  .btn-good:hover{ background:rgba(52,211,153,.14) }
+  .btn-cyan{ color:var(--accent2); box-shadow: 0 8px 20px rgba(34,211,238,.30)}
+  .btn-cyan:hover{ background:rgba(34,211,238,.14) }
+  .btn-rose{ color:var(--warn); box-shadow: 0 8px 20px rgba(251,113,133,.28)}
+  .btn-rose:hover{ background:rgba(251,113,133,.14) }
+
+  /* footer note */
+  .foot{ text-align:center; margin-top:8px; font-size:12px; opacity:.8 }
+
+  /* slideshow modal */
+  .modal{
+    position:fixed; inset:0; display:none; place-items:center;
+    background: rgba(0,0,0,.45); z-index:4; padding:14px;
+  }
+  .modal.open{ display:grid }
+  .slideWrap{
+    width:min(980px, 95vw); height:min(70vh, 75vw);
+    background: #0b1220; border-radius:18px; overflow:hidden; position:relative;
+    border:1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,.55);
+  }
+  .slides{
+    position:absolute; inset:0; display:flex; width:100%; height:100%;
+    transition: transform .6s cubic-bezier(.22,.8,.22,1);
+  }
+  .slide{
+    width:100%; height:100%; flex:none; position:relative;
+    display:grid; place-items:center; overflow:hidden;
+  }
+  .slide img{ width:100%; height:100%; object-fit:cover }
+  .slide .cap{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:10px 14px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,.55));
+    font-weight:600; letter-spacing:.2px;
+  }
+  .modal .topbar{
+    position:absolute; inset:0 auto auto 0; display:flex; gap:8px; padding:10px;
+  }
+  .iconbtn{
+    border:1px solid var(--border); background:var(--glass); color:var(--txt);
+    padding:8px 10px; border-radius:12px; cursor:pointer; font-weight:700;
+  }
+  .input-file{ display:none }
+
+  /* toasts */
+  .toast{
+    position:fixed; left:50%; transform:translateX(-50%);
+    bottom:20px; background:rgba(17,24,39,.85);
+    border:1px solid var(--border); color:var(--txt);
+    padding:10px 14px; border-radius:12px; z-index:5; display:none;
+  }
+  .toast.show{ display:block; animation: toast 2.2s ease; }
+  @keyframes toast { 0%{opacity:0; transform:translate(-50%,20px)} 10%,90%{opacity:1; transform:translate(-50%,0)} 100%{opacity:0; transform:translate(-50%,20px)} }
+
+  /* small */
+  @media (max-width:480px){
+    .subtitle{padding:0 6px}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<canvas id="fireworks"></canvas>
+<canvas id="confetti"></canvas>
+
+<div class="shell">
+  <div class="card">
+    <div class="title">
+      🎉 <span class="grad">Happy Birthday Srijan</span> 🎂
+    </div>
+    <div class="subtitle">
+      28 August ko dhamaka! Tumhara din khushiyon se bhara rahe ✨
+    </div>
+
+    <!-- countdown -->
+    <div class="countdown" id="countdown">
+      <div class="pill"><div class="num" id="d">-</div><div class="lab">Days</div></div>
+      <div class="pill"><div class="num" id="h">-</div><div class="lab">Hours</div></div>
+      <div class="pill"><div class="num" id="m">-</div><div class="lab">Minutes</div></div>
+      <div class="pill"><div class="num" id="s">-</div><div class="lab">Seconds</div></div>
+    </div>
+
+    <!-- actions -->
+    <div class="actions">
+      <button class="btn btn-primary" id="startBtn">
+        <span class="ico">🚀</span> Start Celebration
+      </button>
+      <button class="btn btn-good" id="confettiBtn">
+        <span class="ico">🎊</span> Confetti Burst
+      </button>
+      <button class="btn btn-cyan" id="musicBtn">
+        <span class="ico">🎵</span> Toggle Music
+      </button>
+      <button class="btn btn-rose" id="showSlides">
+        <span class="ico">🖼️</span> Photo Slideshow
+      </button>
+    </div>
+
+    <div class="foot">Tip: “Start Celebration” dabate hi fireworks, stars aur soft music on ho jayega. 🎇</div>
+  </div>
+</div>
+
+<!-- slideshow modal -->
+<div class="modal" id="modal">
+  <div class="slideWrap" id="slideWrap">
+    <div class="topbar">
+      <button class="iconbtn" id="prevBtn">⟨ Prev</button>
+      <button class="iconbtn" id="nextBtn">Next ⟩</button>
+      <label class="iconbtn" for="filePick">＋ Add Photos</label>
+      <input class="input-file" id="filePick" type="file" accept="image/*" multiple>
+      <button class="iconbtn" id="closeModal">✕ Close</button>
+    </div>
+    <div class="slides" id="slides"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Added to slideshow!</div>
+
+<script>
+/* ---------- Utilities ---------- */
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const rand=(a,b)=>Math.random()*(b-a)+a;
+
+/* ---------- Responsive canvases ---------- */
+const fw = document.getElementById('fireworks');
+const cf = document.getElementById('confetti');
+const st = document.getElementById('stars');
+const fwc = fw.getContext('2d');
+const cfc = cf.getContext('2d');
+const stc = st.getContext('2d');
+
+function sizeAll(){
+  [fw,cf,st].forEach(c=>{ c.width=innerWidth; c.height=innerHeight; });
+}
+addEventListener('resize', sizeAll); sizeAll();
+
+/* ---------- Starfield background ---------- */
+let stars = [];
+function makeStars(){
+  stars = Array.from({length: 180}, ()=>({
+    x: Math.random()*st.width,
+    y: Math.random()*st.height,
+    r: Math.random()*1.4+0.3,
+    s: Math.random()*0.4+0.1,
+    a: Math.random()*1
+  }));
+}
+makeStars();
+function drawStars(){
+  stc.clearRect(0,0,st.width,st.height);
+  for(const s of stars){
+    s.a += (Math.random()-.5)*0.06;
+    s.a = clamp(s.a, .2, 1);
+    stc.globalAlpha = s.a;
+    stc.beginPath();
+    stc.arc(s.x,s.y,s.r,0,Math.PI*2);
+    stc.fillStyle = '#e5e7eb';
+    stc.fill();
+  }
+  stc.globalAlpha = 1;
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* ---------- Fireworks ---------- */
+let rockets = [], particles = [], fireOn=false, lastLaunch=0;
+function launch(x){
+  rockets.push({
+    x, y: fw.height, vx: (Math.random()-.5)*1.2, vy: -rand(7.5,10.5),
+    color: `hsl(${Math.floor(rand(0,360))} 100% 60%)`,
+    boomAlt: rand(fw.height*.18, fw.height*.45)
+  });
+}
+function explode(x,y,color){
+  const count = 90;
+  for(let i=0;i<count;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = rand(1,5.2);
+    particles.push({
+      x,y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+      life: rand(60,100), color, size: rand(1,2.6)
+    });
+  }
+}
+function drawFireworks(ts){
+  fwc.clearRect(0,0,fw.width,fw.height);
+  // launch pacing
+  if (fireOn && ts - lastLaunch > 300 + Math.random()*500){
+    launch(rand(fw.width*.15, fw.width*.85));
+    lastLaunch = ts;
+  }
+  // update rockets
+  for(let i=rockets.length-1;i>=0;i--){
+    const r = rockets[i];
+    r.x += r.vx;
+    r.y += r.vy;
+    r.vy += 0.08;
+    fwc.fillStyle = r.color;
+    fwc.beginPath();
+    fwc.arc(r.x,r.y,2.2,0,Math.PI*2); fwc.fill();
+    fwc.fillRect(r.x-1,r.y+2,2,8);
+    if (r.vy>0 || r.y<r.boomAlt){
+      explode(r.x,r.y,r.color); rockets.splice(i,1);
+    }
+  }
+  // update particles
+  for(let i=particles.length-1;i>=0;i--){
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life--;
+    fwc.globalCompositeOperation='screen';
+    fwc.fillStyle = p.color;
+    fwc.globalAlpha = Math.max(0, p.life/100);
+    fwc.beginPath();
+    fwc.arc(p.x,p.y,p.size,0,Math.PI*2); fwc.fill();
+    fwc.globalAlpha = 1; fwc.globalCompositeOperation='source-over';
+    if (p.life<=0) particles.splice(i,1);
+  }
+  requestAnimationFrame(drawFireworks);
+}
+requestAnimationFrame(drawFireworks);
+
+/* ---------- Confetti ---------- */
+let confs=[];
+function burstConfetti(){
+  const n=160;
+  for(let i=0;i<n;i++){
+    confs.push({
+      x: Math.random()*cf.width,
+      y: -10,
+      r: rand(6,12),
+      vy: rand(2,5),
+      vx: rand(-1.5,1.5),
+      rot: Math.random()*Math.PI*2,
+      vr: rand(-.2,.2),
+      color: `hsl(${Math.floor(rand(0,360))} 90% 55%)`
+    });
+  }
+}
+function drawConfetti(){
+  cfc.clearRect(0,0,cf.width,cf.height);
+  confs.forEach(c=>{
+    c.x+=c.vx; c.y+=c.vy; c.rot+=c.vr;
+    cfc.save();
+    cfc.translate(c.x,c.y); cfc.rotate(c.rot);
+    cfc.fillStyle=c.color;
+    cfc.fillRect(-c.r/2,-c.r/2,c.r,c.r*0.6);
+    cfc.restore();
+  });
+  confs = confs.filter(c=>c.y<cf.height+20);
+  requestAnimationFrame(drawConfetti);
+}
+requestAnimationFrame(drawConfetti);
+
+/* ---------- Music (WebAudio) ---------- */
+let audioCtx, masterGain, musicOn=false;
+function initAudio(){
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  masterGain = audioCtx.createGain(); masterGain.gain.value=.0; masterGain.connect(audioCtx.destination);
+
+  // Simple chill chord pad + pluck arpeggio loop
+  // Pad
+  const pad = audioCtx.createOscillator(); pad.type='sawtooth';
+  const padGain = audioCtx.createGain(); padGain.gain.value=.0;
+  pad.connect(padGain).connect(masterGain);
+  pad.start();
+
+  // gentle LFO to pad
+  const lfo = audioCtx.createOscillator(); lfo.type='sine'; lfo.frequency.value=.18;
+  const lfoGain = audioCtx.createGain(); lfoGain.gain.value=20;
+  lfo.connect(lfoGain).connect(pad.detune);
+  lfo.start();
+
+  // Arp
+  const arpGain = audioCtx.createGain(); arpGain.gain.value=.0; arpGain.connect(masterGain);
+
+  function note(freq, t, dur=.24, type='triangle'){
+    const o = audioCtx.createOscillator(); o.type=type; o.frequency.setValueAtTime(freq, t);
+    const g = audioCtx.createGain(); g.gain.value=0;
+    o.connect(g).connect(arpGain);
+    o.start(t);
+    g.gain.linearRampToValueAtTime(.18, t+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0008, t+dur);
+    o.stop(t+dur+0.02);
+  }
+
+  // progression: Em – C – G – D (nice & happy)
+  const chords = [
+    [329.63, 659.25, 987.77], // E minor
+    [261.63, 523.25, 783.99], // C
+    [196.00, 392.00, 587.33], // G
+    [293.66, 587.33, 880.00]  // D
+  ];
+  let bar = audioCtx.currentTime + .1;
+
+  function loop(){
+    // fade in on first loop if enabled
+    // pad chord
+    const [a,b,c] = chords[Math.floor((bar/4)%4)];
+    pad.frequency.setValueAtTime(a/2, bar);
+    padGain.gain.cancelScheduledValues(bar);
+    padGain.gain.setTargetAtTime(.04, bar, .6);
+
+    // arp pattern (8 steps)
+    const pat = [a, b, c, b, a*1.5, c, b, a];
+    for(let i=0;i<8;i++){
+      note(pat[i], bar + i*0.25);
+    }
+    // volumes target
+    arpGain.gain.cancelScheduledValues(bar);
+    arpGain.gain.setTargetAtTime(.22, bar, .4);
+
+    bar += 2; // every 2 seconds change chord (approx)
+    setTimeout(loop, 2000);
+  }
+  loop();
+
+  // graceful master fade
+  function setMusic(on){
+    musicOn = on;
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    masterGain.gain.cancelScheduledValues(now);
+    masterGain.gain.setTargetAtTime(on ? .8 : .0001, now, on ? .8 : .3);
+  }
+  // expose
+  window.__setMusic = setMusic;
+}
+
+/* ---------- Countdown to 28 Aug ---------- */
+function nextBirthdayDate(){
+  const now = new Date();
+  const y = now.getMonth()>7 || (now.getMonth()==7 && now.getDate()>28) ? now.getFullYear()+1 : now.getFullYear();
+  return new Date(y, 7, 28, 0,0,0); // month 7 = August
+}
+const dEl = document.getElementById('d'), hEl=document.getElementById('h'), mEl=document.getElementById('m'), sEl=document.getElementById('s');
+function tickCountdown(){
+  const target = nextBirthdayDate();
+  const diff = Math.max(0, target - new Date());
+  const s = Math.floor(diff/1000)%60;
+  const m = Math.floor(diff/60000)%60;
+  const h = Math.floor(diff/3600000)%24;
+  const d = Math.floor(diff/86400000);
+  dEl.textContent=d; hEl.textContent=h; mEl.textContent=m; sEl.textContent=s;
+}
+setInterval(tickCountdown, 1000); tickCountdown();
+
+/* ---------- Slideshow ---------- */
+const modal = document.getElementById('modal');
+const slides = document.getElementById('slides');
+const filePick = document.getElementById('filePick');
+let slideIndex=0, slideCount=0;
+
+function setSlides(items){
+  slides.innerHTML='';
+  items.forEach(({src, cap})=>{
+    const s = document.createElement('div'); s.className='slide';
+    const img = document.createElement('img'); img.src=src;
+    const c = document.createElement('div'); c.className='cap'; c.textContent=cap||'';
+    s.appendChild(img); s.appendChild(c);
+    slides.appendChild(s);
+  });
+  slideCount = items.length;
+  updateSlide();
+}
+function updateSlide(){
+  slides.style.transform = `translateX(${-slideIndex*100}%)`;
+}
+function showToast(msg='Added to slideshow!'){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function defaultSlides(){
+  // create 4 generated greeting slides using gradients & text (no external files)
+  const msgs = [
+    "Happy Birthday, Srijan! 🎉",
+    "Stay awesome & keep smiling 😄",
+    "More success, more joy ✨",
+    "Party time! 🎂🎈"
+  ];
+  const arr=[];
+  for (let i=0;i<4;i++){
+    const cnv=document.createElement('canvas'); cnv.width=1600; cnv.height=1000;
+    const g=cnv.getContext('2d');
+    const grad=g.createLinearGradient(0,0,1600,1000);
+    grad.addColorStop(0, `hsl(${Math.floor(rand(0,360))} 80% 55%)`);
+    grad.addColorStop(1, `hsl(${Math.floor(rand(0,360))} 80% 40%)`);
+    g.fillStyle=grad; g.fillRect(0,0,1600,1000);
+    // confetti dots
+    for(let k=0;k<220;k++){
+      g.fillStyle=`hsl(${Math.floor(rand(0,360))} 90% 70%)`;
+      g.beginPath(); g.arc(rand(0,1600), rand(0,1000), rand(2,6), 0, Math.PI*2); g.fill();
+    }
+    // text
+    g.font='bold 110px Poppins, Arial'; g.fillStyle='rgba(255,255,255,.92)';
+    g.textAlign='center'; g.textBaseline='middle';
+    g.shadowColor='rgba(0,0,0,.35)'; g.shadowBlur=20;
+    g.fillText(msgs[i], 800, 480);
+    // mini note
+    g.font='600 44px Poppins, Arial'; g.shadowBlur=0; g.fillStyle='rgba(255,255,255,.9)';
+    g.fillText('— From your friend 💖', 800, 620);
+    arr.push({src: cnv.toDataURL('image/png'), cap: msgs[i]});
+  }
+  setSlides(arr);
+}
+defaultSlides();
+
+filePick.addEventListener('change', async (e)=>{
+  const files = [...e.target.files].filter(f=>/^image\//.test(f.type));
+  if(!files.length){ showToast('No images selected'); return; }
+  const arr=[];
+  for (const f of files){
+    const url = URL.createObjectURL(f);
+    arr.push({src:url, cap:f.name});
+  }
+  setSlides(arr);
+  showToast(`${files.length} photo(s) added`);
+  slideIndex=0; updateSlide();
+});
+
+document.getElementById('prevBtn').onclick=()=>{ slideIndex=(slideIndex-1+slideCount)%slideCount; updateSlide(); };
+document.getElementById('nextBtn').onclick=()=>{ slideIndex=(slideIndex+1)%slideCount; updateSlide(); };
+document.getElementById('showSlides').onclick=()=>{ modal.classList.add('open'); };
+document.getElementById('closeModal').onclick=()=>{ modal.classList.remove('open'); };
+
+// touch swipe
+(()=>{ 
+  let sx=0, dx=0, active=false;
+  const wrap=document.getElementById('slideWrap');
+  wrap.addEventListener('touchstart',e=>{ active=true; sx=e.touches[0].clientX; dx=0; });
+  wrap.addEventListener('touchmove',e=>{ if(!active) return; dx=e.touches[0].clientX - sx; });
+  wrap.addEventListener('touchend',()=>{ 
+    if(!active) return; active=false;
+    if (dx>40) document.getElementById('prevBtn').click();
+    else if (dx<-40) document.getElementById('nextBtn').click();
+  });
+})();
+
+/* ---------- Buttons: actions ---------- */
+const startBtn = document.getElementById('startBtn');
+const confettiBtn = document.getElementById('confettiBtn');
+const musicBtn = document.getElementById('musicBtn');
+
+startBtn.addEventListener('click', async ()=>{
+  // enable fireworks & confetti
+  fireOn = true; burstConfetti();
+  // music init + play
+  initAudio();
+  if (audioCtx && audioCtx.state==='suspended'){ await audioCtx.resume(); }
+  window.__setMusic(true);
+  musicBtn.dataset.on = '1';
+  startBtn.blur();
+});
+
+confettiBtn.addEventListener('click', ()=>{ burstConfetti(); confettiBtn.blur(); });
+
+musicBtn.addEventListener('click', async ()=>{
+  initAudio();
+  if (audioCtx && audioCtx.state==='suspended'){ await audioCtx.resume(); }
+  const on = musicBtn.dataset.on==='1';
+  window.__setMusic(!on);
+  musicBtn.dataset.on = on ? '0' : '1';
+  musicBtn.blur();
+});
+
+/* ---------- Extra: auto gentle rocket on tap ---------- */
+addEventListener('click', (e)=>{
+  if (!fireOn) return;
+  if (e.target.closest('.card, .modal, .iconbtn, .btn')) return;
+  launch(e.clientX);
+});
+
+/* ---------- Accessibility tweaks ---------- */
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='Escape'){ modal.classList.remove('open'); }
+});
+</script>
+</body>
+</html>
