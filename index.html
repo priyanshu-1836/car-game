@@ -461,7 +461,11 @@ function setSlides(items){
   slides.innerHTML='';
   items.forEach(({src, cap})=>{
     const s = document.createElement('div'); s.className='slide';
-    const img = document.createElement('img'); img.src=src;
+    const img = [
+      "image1.jpeg"
+      "image2.jpeg"
+    "image3.jpeg"
+    ];
     const c = document.createElement('div'); c.className='cap'; c.textContent=cap||'';
     s.appendChild(img); s.appendChild(c);
     slides.appendChild(s);
